@@ -5,6 +5,7 @@ import asyncErrorHandler from "express-async-handler";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import connectDB from "./config/userDB.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/", userRoutes);
+
+app.use(globalErrorHandler);
 
 const serverStarter = asyncErrorHandler(async () => {
 	await connectDB();
