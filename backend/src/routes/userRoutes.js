@@ -5,5 +5,7 @@ const route = express.Router();
 
 route.route("/user").get(userController.fetchUsers).post(userController.createUser);
 route.get("/user/:id", userController.findUser);
+route.put("/user/:id", userController.updateUser);
+route.delete("/user/:id", userController.deleteUser);
 
 export default route;
