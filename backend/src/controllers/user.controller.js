@@ -11,6 +11,7 @@ import { validateObjectId } from "../helper/validateObjectId.js";
 
 export const fetchUsers = asyncErrorHandler(async (req, res) => {
 	const users = await userServices.fetchUsers();
+	res.header("Cache-Control", "no-cache");
 	res.status(200).json(users);
 });
 
