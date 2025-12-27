@@ -3,10 +3,13 @@ import * as userServices from "../services/user.services.js";
 import { conditionalErrorHandler } from "../helper/conditionalErrorHandler.js";
 import { validateObjectId } from "../helper/validateObjectId.js";
 
-export const fetchUsers = asyncErrorHandler(async (req, res) => {
-	// const name = req.query.name;
-	// const status = req.query.status;
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Object}
+ */
 
+export const fetchUsers = asyncErrorHandler(async (req, res) => {
 	const users = await userServices.fetchUsers();
 	res.status(200).json(users);
 });
@@ -32,19 +35,18 @@ export const findUser = asyncErrorHandler(async (req, res) => {
 });
 
 export const createUser = asyncErrorHandler(async (req, res) => {
-	const { name } = req.body;
+	const { name, email, password } = req.body;
 
-	if (!name) {
-		conditionalErrorHandler("Fields are mandatory to filled.", 404);
-	}
+	// Note: Validation is handled by express-yup-middleware before this controller
+	// So we don't need to manually check if fields exist
 
-	const isUserExist = await userServices.checkUserExists({ name });
+	const isUserExist = await userServices.checkUserExists({ email });
 
 	if (isUserExist) {
-		conditionalErrorHandler("User already exist.", 404);
+		conditionalErrorHandler("User with this email already exists.", 409);
 	}
 
-	const user = await userServices.createUser({ name });
+	const user = await userServices.createUser({ name, email, password });
 
 	res.status(201).send({
 		status: 201,
