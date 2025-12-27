@@ -16,7 +16,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use("/", userRoutes);
+app.use("/api/user", userRoutes);
 
 app.use(globalErrorHandler);
 
